@@ -26,3 +26,10 @@ WHERE EXISTS(
 GROUP BY E.EntregadorID;
 
 -- =============================================================================================
+
+-- Item d) =====================================================================================
+
+SELECT P.PedidoID, P.ClienteID, P.DATA_PED, P.Valor, SUM(P.Valor) OVER (PARTITION BY P.ClienteID) AS total_cliente
+FROM PEDIDOS P ORDER BY P.ClienteID, P.DATA_PED
+
+-- =============================================================================================
