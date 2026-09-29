@@ -15,3 +15,14 @@ LEFT JOIN RESTAURANTES R ON R.RestauranteID = P.RestID
 GROUP BY C.ClienteID, R.NomeR;
 
 -- =============================================================================================
+
+-- Item c) =====================================================================================
+
+SELECT E.EntregadorID, E.NomeE FROM ENTREGADORES E
+JOIN ENTREGA_PEDIDO E_P ON E_P.EntregadorID = E.EntregadorID
+WHERE EXISTS(
+    SELECT 1 FROM PEDIDOS P WHERE (P.STATUS_PED = 'Cancelado' AND P.PedidoID = E_P.PedidoID)
+)
+GROUP BY E.EntregadorID;
+
+-- =============================================================================================
