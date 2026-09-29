@@ -81,7 +81,7 @@ CREATE TABLE PESQUISADOR(
 
 -- Tabela base operacional ->> Possui ID como chave primária, nome e localização
 CREATE TABLE BASE_OPERACIONAL(
-    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, -- Nota-se que no uso de GENERATED ALWAYS ao invés de BY DEFAULT, não se pode fazer a atribuição direta do ID no insert, sendo este gerado apenas pela identity (No BYB DEFAULT pode-se fazer está atribuição);
     NOME VARCHAR(100),
     LOCALIZACAO VARCHAR (100)
 );
@@ -134,10 +134,11 @@ CREATE TABLE PONTO_OBSERVACAO(
             ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- Tabela estacao ->> Possui o ID da estacao e o seu tipo, sendo o primeiro chave primaria. Há também uma descrição da estação.
 CREATE TABLE ESTACAO(
     ID_ESTACAO INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     TIPO tipo_est,
-    DESCRICAO VARCHAR(50)
+    DESCRICAO TEXT
 );
 
 -- Tabela atua ->> Possui o CPF do pesquisador, a expedição em que atua e a estação em que trabalha, sendo estes compositores da PK da tabela e FKs. Ainda contém o relatório do pesquisador.
@@ -145,7 +146,7 @@ CREATE TABLE ATUA(
     CPF_PESQUISADOR VARCHAR(11),
     ID_EXPEDICAO INTEGER,
     ID_ESTACAO INTEGER,
-    RELATORIO VARCHAR(300),
+    RELATORIO TEXT,
 
     PRIMARY KEY (CPF_PESQUISADOR, ID_EXPEDICAO, ID_ESTACAO),
 
@@ -164,24 +165,27 @@ CREATE TABLE ATUA(
 -- ===============================================================================
 
 -- Definição das funções =========================================================
+
+-- Faz a atribuição automática da participacao de um guia em uma expedição na tabela participacao
 CREATE OR REPLACE FUNCTION guia_participacao()
     RETURNS TRIGGER AS $$
         BEGIN
-            INSERT INTO PARTICIPACAO (CPF_PESSOA, ID_EXPEDICAO) VALUES(
-                NEW.CPF_GUIA,
-                NEW.ID_EXPEDICAO
-            );
+            INSERT INTO PARTICIPACAO (CPF_PESSOA, ID_EXPEDICAO, DATA_PARTICIPACAO)
+                SELECT NEW.CPF_GUIA, NEW.ID_EXPEDICAO, P.DATA_PARTICIPACAO
+                FROM PARTICIPACAO P
+                WHERE P.ID_EXPEDICAO = NEW.ID_EXPEDICAO;
             RETURN NULL;
         END;
     $$ LANGUAGE plpgsql;
 
+-- Faz a atribuição automática da participacao de um pesquisador em uma expedição na tabela participacao
 CREATE OR REPLACE FUNCTION pesq_participacao()
     RETURNS TRIGGER AS $$
         BEGIN
-            INSERT INTO PARTICIPACAO (CPF_PESSOA, ID_EXPEDICAO) VALUES(
-                NEW.CPF_PESQUISADOR,
-                NEW.ID_EXPEDICAO
-            );
+            INSERT INTO PARTICIPACAO (CPF_PESSOA, ID_EXPEDICAO, DATA_PARTICIPACAO)
+                SELECT NEW.CPF_GUIA, NEW.ID_EXPEDICAO, P.DATA_PARTICIPACAO
+                FROM PARTICIPACAO P
+                WHERE P.ID_EXPEDICAO = NEW.ID_EXPEDICAO;
             RETURN NULL;
         END;
     $$ LANGUAGE plpgsql;
