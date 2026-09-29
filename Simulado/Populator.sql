@@ -75,7 +75,7 @@ VALUES
 
 -- Lucas:
 -- apenas um pedido
-(5, 4, '2026-09-24', 'Entregue');
+(5, 4, '2026-09-24', 'Cancelado');
 
 
 -- Carla (ClienteID = 6)
