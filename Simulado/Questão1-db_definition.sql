@@ -36,6 +36,7 @@ CREATE TABLE PEDIDOS(
     RestID INTEGER NOT NULL,
     DATA_PED DATE NOT NULL,
     STATUS_PED ped_status,
+    Valor NUMERIC(5,2),
 
     CONSTRAINT pedidos_pk PRIMARY KEY (PedidoID),
     CONSTRAINT pedidos_sk UNIQUE (ClienteID, RestID, DATA_PED),

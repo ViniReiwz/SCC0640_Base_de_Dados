@@ -46,41 +46,45 @@ INSERT INTO ENTREGADORES (NomeE, Veiculo, Placa) VALUES
 -- =========================
 
 INSERT INTO PEDIDOS
-    (ClienteID, RestID, DATA_PED, STATUS_PED)
+    (ClienteID, RestID, DATA_PED, STATUS_PED, Valor)
 VALUES
 
 -- Joao:
 -- 2 pedidos no Pizza Mania
 -- 1 pedido no Sabor Caseiro
-(1, 2, '2026-09-20', 'Entregue'),
-(1, 2, '2026-09-21', 'Entregue'),
-(1, 1, '2026-09-22', 'Entregue'),
+
+(1, 2, '2026-09-20', 'Entregue',   45.90),
+(1, 2, '2026-09-21', 'Entregue',   72.50),
+(1, 1, '2026-09-22', 'Entregue',   38.00),
 
 -- Maria:
 -- 2 pedidos no Burger House
 -- 1 pedido no Pizza Mania
-(2, 3, '2026-09-21', 'Entregue'),
-(2, 3, '2026-09-23', 'Entregue'),
-(2, 2, '2026-09-24', 'Recebido'),
+
+(2, 3, '2026-09-21', 'Entregue',   55.00),
+(2, 3, '2026-09-23', 'Entregue',   89.90),
+(2, 2, '2026-09-24', 'Recebido',   62.00),
 
 -- Pedro:
 -- pedidos em restaurantes diferentes
-(3, 1, '2026-09-22', 'Cancelado'),
-(3, 4, '2026-09-25', 'Entregue'),
+
+(3, 1, '2026-09-22', 'Cancelado',  40.00),
+(3, 4, '2026-09-25', 'Entregue',   120.50),
 
 -- Ana:
 -- vários pedidos no mesmo restaurante
-(4, 5, '2026-09-23', 'Entregue'),
-(4, 5, '2026-09-26', 'Em preparo'),
+
+(4, 5, '2026-09-23', 'Entregue',   95.00),
+(4, 5, '2026-09-26', 'Em preparo', 110.75),
 
 -- Lucas:
 -- apenas um pedido
-(5, 4, '2026-09-24', 'Cancelado');
+
+(5, 4, '2026-09-24', 'Cancelado',  78.90);
 
 
 -- Carla (ClienteID = 6)
 -- NÃO possui nenhum pedido.
-
 
 -- Paulo (ClienteID = 7)
 -- NÃO possui nenhum pedido.
@@ -95,6 +99,7 @@ INSERT INTO ENTREGA_PEDIDO
 VALUES
 
 -- Entregas de pedidos entregues
+
 (1, 1, '2026-09-20'),
 (2, 2, '2026-09-21'),
 (3, 3, '2026-09-22'),
@@ -107,4 +112,5 @@ VALUES
 -- Pedido cancelado que chegou a ter entregador
 -- útil para testar a consulta de entregadores
 -- que entregaram pedidos cancelados
+
 (7, 1, '2026-09-22');
