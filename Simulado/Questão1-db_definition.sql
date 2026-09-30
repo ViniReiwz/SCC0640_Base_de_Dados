@@ -1,12 +1,29 @@
+-- Remove as tabelas para evitar duplicação ao rodar o script (apaga todos os dados também, bom para 'resetar' o banco de dados)
 DROP TABLE IF EXISTS CLIENTES CASCADE;
 DROP TABLE IF EXISTS RESTAURANTES CASCADE;
 DROP TABLE IF EXISTS PEDIDOS CASCADE;
 DROP TABLE IF EXISTS ENTREGADORES CASCADE;
 DROP TABLE IF EXISTS ENTREGA_PEDIDO;
+-- =============================================================================================
 
+-- Remove os tipos para evitar duplicação ======================================================
 DROP TYPE IF EXISTS ped_status;
 DROP TYPE IF EXISTS ent_veic;
+-- =============================================================================================
 
+-- Cria os tipos de dados auxiliares ===========================================================
+
+CREATE TYPE ped_status AS ENUM(
+    'Recebido', 'Em preparo', 'Entregue', 'Cancelado'
+);
+
+CREATE TYPE ent_veic AS ENUM(
+    'Moto', 'Bicicleta', 'Carro'
+);
+
+-- =============================================================================================
+
+-- Cria as tabelas (com suas respectivas constraints) ==========================================
 CREATE TABLE CLIENTES(
     ClienteID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     NomeC VARCHAR(20) NOT NULL,
@@ -26,10 +43,6 @@ CREATE TABLE RESTAURANTES(
     CONSTRAINT nome_r_uniq UNIQUE (NomeR)
 );
 
-CREATE TYPE ped_status AS ENUM(
-    'Recebido', 'Em preparo', 'Entregue', 'Cancelado'
-);
-
 CREATE TABLE PEDIDOS(
     PedidoID INTEGER GENERATED ALWAYS AS IDENTITY,
     ClienteID INTEGER NOT NULL,
@@ -46,9 +59,6 @@ CREATE TABLE PEDIDOS(
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TYPE ent_veic AS ENUM(
-    'Moto', 'Bicicleta', 'Carro'
-);
 
 CREATE TABLE ENTREGADORES(
     EntregadorID INTEGER GENERATED ALWAYS AS IDENTITY,
@@ -71,4 +81,5 @@ CREATE TABLE ENTREGA_PEDIDO(
         ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT ent_ped_fk_ent FOREIGN KEY (EntregadorID) REFERENCES ENTREGADORES(EntregadorID)
         ON DELETE CASCADE ON UPDATE CASCADE
-);  
+);
+-- =============================================================================================
